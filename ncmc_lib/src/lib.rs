@@ -72,16 +72,14 @@ impl NcmFile {
         let mut last_byte = 0;
         let mut key_offset = 0;
         for i in 0..256 {
-            let swap = key_box[i];
-            let c = swap
+            let c = key_box[i]
                 .wrapping_add(last_byte)
                 .wrapping_add(key_data[key_offset]);
             key_offset += 1;
             if key_offset >= key_data.len() {
                 key_offset = 0;
             }
-            key_box[i] = key_box[c as usize];
-            key_box[c as usize] = swap;
+            key_box.swap(i, c as usize);
             last_byte = c;
         }
         Ok(key_box.to_vec())

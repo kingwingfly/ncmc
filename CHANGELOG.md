@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.4] - 2025-02-05
+
+- performance improvement
+
 ## [0.1.3] - 2025-02-05
 
 - better error handler
