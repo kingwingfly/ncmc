@@ -7,15 +7,15 @@ A tool to convert ncm file to mp3/flac/...
 # Usage
 
 ```shell
-ncmc -h
+ncm_c -h
 
-find . -type f -name '*.ncm' -print0 | xargs -0 ncmc
+find . -type f -name '*.ncm' -print0 | xargs -0 ncm_c
 ```
 
 # Installation
 
 ```shell
-cargo install ncmc
+cargo install ncm_c
 ```
 or download the binary from [release page](https://github.com/kingwingfly/ncmc/releases)
 

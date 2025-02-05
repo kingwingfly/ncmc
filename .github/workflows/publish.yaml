@@ -3,8 +3,8 @@ name: publish
 on:
   workflow_dispatch:
     inputs:
-      ncmc:
-        description: "publish ncmc"
+      ncm_c:
+        description: "publish ncm_c"
         type: boolean
         default: false
 
@@ -32,6 +32,6 @@ jobs:
         if: ${{ inputs.ncmc_lib }}
         run: .github/scripts/publish_test.sh ncmc_lib && .github/scripts/publish.sh ncmc_lib
 
-      - name: publish ncmc
+      - name: publish ncm_c
         if: ${{ inputs.ncmc }}
-        run: .github/scripts/publish_test.sh ncmc && .github/scripts/publish.sh ncmc
+        run: .github/scripts/publish_test.sh ncm_c && .github/scripts/publish.sh ncm_c

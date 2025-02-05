@@ -1,5 +1,5 @@
 [package]
-name = "ncmc"
+name = "ncm_c"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

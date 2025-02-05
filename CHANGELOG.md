@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.1] - 2025-02-05
+
+- conflic name with ncmc on crates.io
+
 ## [0.1.0] - 2025-02-05
 
 - MVP
