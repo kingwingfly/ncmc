@@ -1,18 +1,18 @@
 [workspace]
-members = ["ncm2mp3_lib", "ncm2mp3_cli"]
+members = ["ncmc_lib", "ncmc"]
 resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
 authors = ["Louis <836250617@qq.com>"]
-description = "convert ncm to mp3"
+description = "convert ncm to mp3 or flac ..."
 license = "MIT"
-edition = "2024"
+edition = "2021"
 repository = "https://github.com/kingwingfly/fav"
 documentation = ""
 
 [workspace.dependencies]
-ncm2mp3_lib = { path = "ncm2mp3_lib" }
+ncmc_lib = { path = "ncmc_lib" }
 thiserror = { version = "2.0.11" }
 
 [profile.release]

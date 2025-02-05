@@ -1,0 +1,28 @@
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      ncmc_lib:
+        description: "publish ncmc_lib"
+        type: boolean
+        default: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install cargo components
+        run: rustup component add clippy
+
+      - name: login to crates.io
+        run: cargo login ${{ secrets.CRATESIO }}
+
+      - name: publish ncmc_lib
+        if: ${{ inputs.ncmc_lib }}
+        run: .github/scripts/publish_test.sh ncmc_lib && .github/scripts/publish.sh ncmc_lib
