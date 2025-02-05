@@ -1,0 +1,7 @@
+[package]
+name = "ncm2mp3_cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ncm2mp3_lib = { workspace = true }

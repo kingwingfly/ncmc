@@ -1,0 +1,23 @@
+[workspace]
+members = ["ncm2mp3_lib", "ncm2mp3_cli"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Louis <836250617@qq.com>"]
+description = "convert ncm to mp3"
+license = "MIT"
+edition = "2024"
+repository = "https://github.com/kingwingfly/fav"
+documentation = ""
+
+[workspace.dependencies]
+ncm2mp3_lib = { path = "ncm2mp3_lib" }
+thiserror = { version = "2.0.11" }
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+strip = "debuginfo"
+panic = "abort"
