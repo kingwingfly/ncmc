@@ -3,6 +3,11 @@ name: publish
 on:
   workflow_dispatch:
     inputs:
+      ncmc:
+        description: "publish ncmc"
+        type: boolean
+        default: false
+
       ncmc_lib:
         description: "publish ncmc_lib"
         type: boolean
@@ -22,6 +27,10 @@ jobs:
 
       - name: login to crates.io
         run: cargo login ${{ secrets.CRATESIO }}
+
+      - name: publish ncmc
+        if: ${{ inputs.ncmc }}
+        run: .github/scripts/publish_test.sh ncmc && .github/scripts/publish.sh ncmc
 
       - name: publish ncmc_lib
         if: ${{ inputs.ncmc_lib }}

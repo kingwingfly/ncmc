@@ -1,3 +1,5 @@
+//! Netease Cloud Music Crypt
+
 mod error;
 
 use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, KeyInit};
