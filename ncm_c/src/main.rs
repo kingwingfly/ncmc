@@ -18,10 +18,8 @@ fn main() {
         .into_iter()
         .map(|path| {
             thread::spawn(move || {
-                let mut ncm = NcmFile::open(&path).unwrap();
-                match ncm.save() {
-                    Ok(_) => println!("Decrypted {}", path.display()),
-                    Err(e) => eprintln!("Failed when decrypting {}: {e}", path.display()),
+                if let Err(e) = NcmFile::open(&path).and_then(|mut f| f.save()) {
+                    eprintln!("Failed when decrypting {}: {e}", path.display());
                 }
             })
         })
