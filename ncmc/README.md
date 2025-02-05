@@ -9,7 +9,7 @@ A tool to convert ncm file to mp3/flac/...
 ```shell
 ncmc -h
 
-ls *.ncm | ncmc
+find . -type f -name '*.ncm' -print0 | xargs -0 ncmc
 ```
 
 # Installation
