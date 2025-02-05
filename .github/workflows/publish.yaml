@@ -33,5 +33,5 @@ jobs:
         run: .github/scripts/publish_test.sh ncmc_lib && .github/scripts/publish.sh ncmc_lib
 
       - name: publish ncm_c
-        if: ${{ inputs.ncmc }}
+        if: ${{ inputs.ncm_c }}
         run: .github/scripts/publish_test.sh ncm_c && .github/scripts/publish.sh ncm_c
