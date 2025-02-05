@@ -7,7 +7,7 @@ use std::thread;
 #[command(version, about)]
 struct Cli {
     /// Input files, can be multiple.
-    /// e.g. `ls music/*.ncm | ncmc`.
+    /// e.g. `find . -type f -name '*.ncm' -print0 | xargs -0 ncm_c`.
     /// The output will be next to the input file.
     input: Vec<PathBuf>,
 }

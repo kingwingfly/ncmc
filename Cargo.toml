@@ -3,7 +3,7 @@ members = ["ncmc_lib", "ncm_c"]
 resolver = "2"
 
 [workspace.package]
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Louis <836250617@qq.com>"]
 description = "convert ncm to mp3 or flac ..."
 license = "MIT"
@@ -12,7 +12,7 @@ repository = "https://github.com/kingwingfly/fav"
 documentation = ""
 
 [workspace.dependencies]
-ncmc_lib = { path = "ncmc_lib", version = "0.1.1" }
+ncmc_lib = { path = "ncmc_lib", version = "0.1.2" }
 thiserror = { version = "2.0.11" }
 
 [profile.release]
