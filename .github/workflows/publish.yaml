@@ -28,10 +28,10 @@ jobs:
       - name: login to crates.io
         run: cargo login ${{ secrets.CRATESIO }}
 
-      - name: publish ncmc
-        if: ${{ inputs.ncmc }}
-        run: .github/scripts/publish_test.sh ncmc && .github/scripts/publish.sh ncmc
-
       - name: publish ncmc_lib
         if: ${{ inputs.ncmc_lib }}
         run: .github/scripts/publish_test.sh ncmc_lib && .github/scripts/publish.sh ncmc_lib
+
+      - name: publish ncmc
+        if: ${{ inputs.ncmc }}
+        run: .github/scripts/publish_test.sh ncmc && .github/scripts/publish.sh ncmc
