@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.5] - 2025-02-08
+
+- `-j` option to set the number of threads
+
 ## [0.1.4] - 2025-02-05
 
 - performance improvement
