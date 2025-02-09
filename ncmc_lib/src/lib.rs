@@ -1,4 +1,4 @@
-//! Netease Cloud Music Crypt
+#![doc = include_str!("../README.md")]
 
 mod error;
 

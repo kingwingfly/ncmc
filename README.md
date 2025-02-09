@@ -1,1 +1,1 @@
-ncmc_lib/README.md
+ncm_c/README.md

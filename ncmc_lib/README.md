@@ -1,25 +1,17 @@
 # About
 
-A tool to convert ncm file to mp3/flac/...
+The lib for the tool to convert ncm file to mp3/flac/...
 
-网易云音乐的ncm文件转换工具。
+网易云音乐的ncm文件转换工具`ncm_c`的库。
 
 # Usage
 
-```shell
-ncm_c -h
+```rust no_run
+use ncmc_lib::NcmFile;
 
-find . -type f -name '*.ncm' -exec ncm_c {} +
-# for `fd` user
-fd -e ncm -X ncm_c
+let ncm = NcmFile::open("path/to/your.ncm").unwrap();
+ncm.save().unwrap();
 ```
-
-# Installation
-
-```shell
-cargo install ncm_c
-```
-or download the binary from [release page](https://github.com/kingwingfly/ncmc/releases)
 
 # Acknowledgement
 
