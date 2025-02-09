@@ -8,6 +8,8 @@ pub enum NcmError {
     Io(#[from] std::io::Error),
     #[error("Invalid data")]
     Invalid,
+    #[error("Invalid music tag")]
+    InvalidTag(#[from] id3::Error),
 }
 
 /// type alias for `Result`

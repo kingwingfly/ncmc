@@ -9,6 +9,13 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.9] - 2025-02-09
+
+- add music meta info to the output file, i.e. cover, title, artist, album etc.
+- allow setting path manually (`NcmFile::save_to`) when saving
+- impl Read for NcmFile
+- performance improvement
+
 ## [0.1.8] - 2025-02-09
 
 - better help message

@@ -6,6 +6,10 @@ use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, KeyInit};
 use base64::{prelude::BASE64_STANDARD, Engine};
 use ecb::Decryptor;
 use error::{NcmError, Result};
+use id3::{
+    frame::{Picture, PictureType},
+    Tag, TagLike as _,
+};
 use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
@@ -23,7 +27,7 @@ const META_MASK: u8 = 0x63;
 pub struct NcmFile {
     file: File,
     path: PathBuf,
-    key: Vec<u8>,
+    key: Key,
     meta: Meta,
 }
 
@@ -33,10 +37,10 @@ impl NcmFile {
         let path = path.as_ref().to_owned();
         let mut file = File::open(&path).unwrap();
         Self::verify_header(&mut file)?;
-        let key = Self::get_key(&mut file)?;
-        let meta = Self::get_meta(&mut file)?;
+        let key = Key::new(Self::get_key(&mut file)?);
+        let mut meta = Self::get_meta(&mut file)?;
         file.seek_relative(9)?; // CRC(4) and Padding(5)
-        Self::skip_image(&mut file)?;
+        meta.cover = Self::get_cover(&mut file)?;
         Ok(Self {
             file,
             path,
@@ -109,42 +113,91 @@ impl NcmFile {
         serde_json::from_slice(&buf[6..]).map_err(|_| NcmError::Invalid)
     }
 
-    fn skip_image(file: &mut File) -> Result<()> {
+    fn get_cover(file: &mut File) -> Result<Vec<u8>> {
         let mut buf = [0; 4];
         file.read_exact(&mut buf)?;
-        let length = u32::from_le_bytes(buf) as i64;
-        file.seek_relative(length)?;
-        Ok(())
+        let length = u32::from_le_bytes(buf);
+        let mut buf = vec![0; length as usize];
+        file.read_exact(&mut buf)?;
+        Ok(buf)
     }
 
     /// save as general format next to the original ncm file
-    pub fn save(mut self) -> Result<()> {
-        let mut file = std::fs::File::create(self.path.with_extension(&self.meta.format))?;
-        let mut buf = vec![];
-        let size = self.file.read_to_end(&mut buf)?;
-        for i in 1..size + 1 {
-            let j = i & 0xff;
-            buf[i - 1] ^= self.key[self.key[j]
-                .wrapping_add(self.key[self.key[j].wrapping_add(j as u8) as usize])
-                as usize];
-        }
-        file.write_all(&buf)?;
+    pub fn save(self) -> Result<()> {
+        let path = self.path.with_extension(&self.meta.format);
+        self.save_to(path)
+    }
+
+    /// save as general format to the specified path
+    pub fn save_to(self, path: impl AsRef<Path>) -> Result<()> {
+        let tag = Tag::from(&self.meta);
+        self.save_without_tags_to(&path)?;
+        tag.write_to_path(path, id3::Version::Id3v24)?;
+        Ok(())
+    }
+
+    /// savenext to the original ncm file without tags
+    pub fn save_without_tags(self) -> Result<()> {
+        let path = self.path.with_extension(&self.meta.format);
+        self.save_without_tags_to(path)
+    }
+
+    /// save to the specified path without tags
+    pub fn save_without_tags_to(mut self, path: impl AsRef<Path>) -> Result<()> {
+        let mut file = std::fs::File::create(&path)?;
+        std::io::copy(&mut self, &mut file)?;
         file.flush()?;
         Ok(())
     }
 
-    /// Get the meta data
+    /// Get the meta data (including cover, artist, album, etc.)
     pub fn meta(&self) -> &Meta {
         &self.meta
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+impl Read for NcmFile {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        let size = self.file.read(buf)?;
+        for (i, key) in (0..size).zip(&mut self.key) {
+            buf[i] ^= key;
+        }
+        Ok(size)
+    }
+}
+
+#[derive(Debug)]
+struct Key {
+    key: Vec<u8>,
+    i: u8,
+}
+
+impl Key {
+    fn new(key: Vec<u8>) -> Self {
+        Self { key, i: 0 }
+    }
+}
+
+impl Iterator for Key {
+    type Item = u8;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.i = self.i.wrapping_add(1);
+        Some(
+            self.key[self.key[self.i as usize]
+                .wrapping_add(self.key[self.key[self.i as usize].wrapping_add(self.i) as usize])
+                as usize],
+        )
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[allow(missing_docs)]
 pub struct Meta {
     pub album: String,
     #[serde(rename = "albumId")]
     pub album_id: usize,
+    /// The url of the cover image
     #[serde(rename = "albumPic")]
     pub album_pic: String,
     #[serde(rename = "albumPicDocId")]
@@ -164,4 +217,34 @@ pub struct Meta {
     pub mv_id: usize,
     #[serde(rename = "transNames")]
     pub trans_names: Vec<String>,
+    #[serde(skip)]
+    pub cover: Vec<u8>,
+}
+
+impl From<&Meta> for Tag {
+    fn from(meta: &Meta) -> Self {
+        let mut tag = Tag::new();
+        tag.set_album(meta.album.clone());
+        tag.add_frame(Picture {
+            mime_type: "image/jpeg".to_string(),
+            picture_type: PictureType::CoverFront,
+            description: "Cover".to_string(),
+            data: meta.cover.clone(),
+        });
+        tag.set_artist(
+            meta.artist
+                .iter()
+                .map(|(name, _)| name)
+                .fold(String::new(), |acc, x| {
+                    if acc.is_empty() {
+                        x.to_string()
+                    } else {
+                        acc + ", " + x
+                    }
+                }),
+        );
+        tag.set_duration(meta.duration as u32);
+        tag.set_title(meta.music_name.clone());
+        tag
+    }
 }

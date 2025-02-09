@@ -8,6 +8,7 @@ description = "convert ncm to mp3 or flac ..."
 
 [dependencies]
 thiserror = { workspace = true }
+id3 = { version = "1.16.2" }
 aes = { version = "0.8.4" }
 ecb = { version = "0.1.2" }
 base64 = { version = "0.22.1" }
