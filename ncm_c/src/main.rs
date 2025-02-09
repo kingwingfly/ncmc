@@ -46,7 +46,7 @@ fn main() {
                     // Extract the stolen task, if there is one.
                     .and_then(|s| s.success())
                 }) {
-                    match NcmFile::open(&path).and_then(|mut f| f.save()) {
+                    match NcmFile::open(&path).and_then(|f| f.save()) {
                         Ok(_) => println!("Decrypted {}", path.display()),
                         Err(e) => eprintln!("Failed to decrypt {}: {}", path.display(), e),
                     }

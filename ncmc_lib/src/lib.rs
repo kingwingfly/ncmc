@@ -6,6 +6,7 @@ use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, KeyInit};
 use base64::{prelude::BASE64_STANDARD, Engine};
 use ecb::Decryptor;
 use error::{NcmError, Result};
+use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
     io::{Read, Seek, Write as _},
@@ -23,7 +24,7 @@ pub struct NcmFile {
     file: File,
     path: PathBuf,
     key: Vec<u8>,
-    meta: Vec<u8>,
+    meta: Meta,
 }
 
 impl NcmFile {
@@ -85,7 +86,7 @@ impl NcmFile {
         Ok(key_box.to_vec())
     }
 
-    fn get_meta(file: &mut File) -> Result<Vec<u8>> {
+    fn get_meta(file: &mut File) -> Result<Meta> {
         let mut buf = [0; 4];
         file.read_exact(&mut buf)?;
         let length = u32::from_le_bytes(buf) as usize;
@@ -105,7 +106,7 @@ impl NcmFile {
         if &buf[..6] != b"music:" {
             return Err(NcmError::Invalid);
         }
-        Ok(buf[6..].to_vec())
+        serde_json::from_slice(&buf[6..]).map_err(|_| NcmError::Invalid)
     }
 
     fn skip_image(file: &mut File) -> Result<()> {
@@ -117,11 +118,8 @@ impl NcmFile {
     }
 
     /// save as general format next to the original ncm file
-    pub fn save(&mut self) -> Result<()> {
-        let meta = serde_json::from_slice::<serde_json::Value>(&self.meta[..])
-            .map_err(|_| NcmError::Invalid)?;
-        let format = meta["format"].as_str().ok_or(NcmError::Invalid)?;
-        let mut file = std::fs::File::create(self.path.with_extension(format))?;
+    pub fn save(mut self) -> Result<()> {
+        let mut file = std::fs::File::create(self.path.with_extension(&self.meta.format))?;
         let mut buf = vec![];
         let size = self.file.read_to_end(&mut buf)?;
         for i in 1..size + 1 {
@@ -134,4 +132,36 @@ impl NcmFile {
         file.flush()?;
         Ok(())
     }
+
+    /// Get the meta data
+    pub fn meta(&self) -> &Meta {
+        &self.meta
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[allow(missing_docs)]
+pub struct Meta {
+    pub album: String,
+    #[serde(rename = "albumId")]
+    pub album_id: usize,
+    #[serde(rename = "albumPic")]
+    pub album_pic: String,
+    #[serde(rename = "albumPicDocId")]
+    pub album_pic_doc_id: usize,
+    pub alias: Vec<String>,
+    pub artist: Vec<(String, usize)>,
+    pub bitrate: usize,
+    pub duration: usize,
+    pub flag: usize,
+    pub format: String,
+    pub gain: f64,
+    #[serde(rename = "musicId")]
+    pub music_id: usize,
+    #[serde(rename = "musicName")]
+    pub music_name: String,
+    #[serde(rename = "mvId")]
+    pub mv_id: usize,
+    #[serde(rename = "transNames")]
+    pub trans_names: Vec<String>,
 }

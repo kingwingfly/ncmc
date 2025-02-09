@@ -11,4 +11,5 @@ thiserror = { workspace = true }
 aes = { version = "0.8.4" }
 ecb = { version = "0.1.2" }
 base64 = { version = "0.22.1" }
+serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
