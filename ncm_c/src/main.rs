@@ -11,7 +11,7 @@ struct Cli {
     /// Number of threads to use.
     threads: usize,
     /// Input files, can be multiple.
-    /// e.g. `find . -type f -name '*.ncm' | xargs -I {} ncm_c {}` or `fd -e ncm -X ncm_c`.
+    /// e.g. `find . -type f -name '*.ncm' -exec ncm_c {} +` or `fd -e ncm -X ncm_c`.
     /// The output will be next to the input file.
     input: Vec<PathBuf>,
 }
