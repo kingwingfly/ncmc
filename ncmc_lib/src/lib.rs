@@ -35,7 +35,7 @@ impl NcmFile {
     /// Open a ncm file
     pub fn open(path: impl AsRef<Path>) -> Result<Self> {
         let path = path.as_ref().to_owned();
-        let mut file = File::open(&path).unwrap();
+        let mut file = File::open(&path)?;
         Self::verify_header(&mut file)?;
         let key = Key::new(Self::get_key(&mut file)?);
         let mut meta = Self::get_meta(&mut file)?;
