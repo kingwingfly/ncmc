@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.12] - 2025-02-28
+
+- add a new command example in help msg
+
 ## [0.1.11] - 2025-02-12
 
 - remove unwrap in `NcmFile::open`
