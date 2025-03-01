@@ -8,7 +8,7 @@ statements=(
     "cargo fetch --locked"
     "cargo clippy --all-features --all-targets -- -D warnings"
 
-    "cargo doc --no-deps -p ncm2c"
+    "cargo doc --no-deps -p ncmc_lib"
 )
 
 # loop echo and executing statements
