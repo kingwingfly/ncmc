@@ -110,7 +110,10 @@ impl NcmFile {
         if &buf[..6] != b"music:" {
             return Err(NcmError::Invalid);
         }
-        serde_json::from_slice(&buf[6..]).map_err(|_| NcmError::Invalid)
+        serde_json::from_slice(&buf[6..]).map_err(|e| {
+            eprintln!("Failed to parse meta: {}", e);
+            NcmError::Invalid
+        })
     }
 
     fn get_cover(file: &mut File) -> Result<Vec<u8>> {
@@ -201,14 +204,15 @@ pub struct Meta {
     #[serde(rename = "albumPic")]
     pub album_pic: String,
     #[serde(rename = "albumPicDocId")]
-    pub album_pic_doc_id: usize,
+    pub album_pic_doc_id: serde_json::Value,
     pub alias: Vec<String>,
     pub artist: Vec<(String, usize)>,
     pub bitrate: usize,
     pub duration: usize,
+    #[serde(default)]
     pub flag: usize,
     pub format: String,
-    pub gain: f64,
+    pub gain: Option<f64>,
     #[serde(rename = "musicId")]
     pub music_id: usize,
     #[serde(rename = "musicName")]

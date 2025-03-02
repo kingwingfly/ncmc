@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.13] - 2025-03-02
+
+- fix a bug in meta parsing if the `ncm` file is downloaded from macOS' netease music app.
+
 ## [0.1.12] - 2025-02-28
 
 - add a new command example in help msg
