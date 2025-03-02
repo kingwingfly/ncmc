@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.15] - 2025-03-03
+
+- more concrete error message when parsing invalid ncm file
+
 ## [0.1.14] - 2025-03-02
 
 - remove a default value fallback in metadata flag from `usize` to `Option<usize>`

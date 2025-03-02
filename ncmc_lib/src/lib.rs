@@ -53,7 +53,7 @@ impl NcmFile {
         let mut buf = [0; 10];
         file.read_exact(&mut buf)?;
         if &buf[..8] != b"CTENFDAM" {
-            return Err(NcmError::Invalid);
+            return Err(NcmError::Invalid("Invalid file header".to_string()));
         }
         Ok(())
     }
@@ -68,9 +68,9 @@ impl NcmFile {
         let aes = Decryptor::<aes::Aes128>::new_from_slice(CORE_KEY).unwrap();
         let buf = aes
             .decrypt_padded_mut::<Pkcs7>(&mut buf)
-            .map_err(|_| NcmError::Invalid)?;
+            .map_err(|_| NcmError::Invalid("Failed to decrypt key".to_string()))?;
         if &buf[..17] != b"neteasecloudmusic" {
-            return Err(NcmError::Invalid);
+            return Err(NcmError::Invalid("Invalid key header".to_string()));
         }
         let key_data = &buf[17..];
         let mut key_box: [u8; 256] = core::array::from_fn(|i| i as u8);
@@ -98,22 +98,20 @@ impl NcmFile {
         file.read_exact(&mut buf)?;
         buf.iter_mut().for_each(|byte| *byte ^= META_MASK);
         if &buf[..22] != b"163 key(Don't modify):" {
-            return Err(NcmError::Invalid);
+            return Err(NcmError::Invalid("Invalid metadata header".to_string()));
         }
         let mut buf = BASE64_STANDARD
             .decode(&buf[22..])
-            .map_err(|_| NcmError::Invalid)?;
+            .map_err(|_| NcmError::Invalid("Failed to decode base64 metadata".to_string()))?;
         let aes = Decryptor::<aes::Aes128>::new_from_slice(META_KEY).unwrap();
         let buf = aes
             .decrypt_padded_mut::<Pkcs7>(&mut buf)
-            .map_err(|_| NcmError::Invalid)?;
+            .map_err(|_| NcmError::Invalid("Failed to decrypt metadata".to_string()))?;
         if &buf[..6] != b"music:" {
-            return Err(NcmError::Invalid);
+            return Err(NcmError::Invalid("Invalid meta marker".to_string()));
         }
-        serde_json::from_slice(&buf[6..]).map_err(|e| {
-            eprintln!("Failed to parse meta: {}", e);
-            NcmError::Invalid
-        })
+        serde_json::from_slice(&buf[6..])
+            .map_err(|e| NcmError::Invalid(format!("Failed to parse metadata: {}", e)))
     }
 
     fn get_cover(file: &mut File) -> Result<Vec<u8>> {

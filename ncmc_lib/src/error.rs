@@ -6,8 +6,8 @@ use thiserror::Error;
 pub enum NcmError {
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-    #[error("Invalid data")]
-    Invalid,
+    #[error("Invalid data: {0}")]
+    Invalid(String),
     #[error("Invalid music tag")]
     InvalidTag(#[from] id3::Error),
 }
