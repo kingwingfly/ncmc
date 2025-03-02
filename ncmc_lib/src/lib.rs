@@ -209,8 +209,7 @@ pub struct Meta {
     pub artist: Vec<(String, usize)>,
     pub bitrate: usize,
     pub duration: usize,
-    #[serde(default)]
-    pub flag: usize,
+    pub flag: Option<usize>,
     pub format: String,
     pub gain: Option<f64>,
     #[serde(rename = "musicId")]

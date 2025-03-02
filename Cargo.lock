@@ -333,7 +333,7 @@ dependencies = [
 
 [[package]]
 name = "ncm_c"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "clap",
  "crossbeam",
@@ -342,7 +342,7 @@ dependencies = [
 
 [[package]]
 name = "ncmc_lib"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "aes",
  "base64",
