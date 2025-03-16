@@ -7,8 +7,7 @@ authors = ["Louis <836250617@qq.com>"]
 description = "convert ncm to mp3 or flac ..."
 license = "MIT"
 edition = "2024"
-repository = "https://github.com/kingwingfly/fav"
-documentation = ""
+repository = "https://github.com/kingwingfly/ncmc"
 
 [workspace.dependencies]
 thiserror = { version = "2.0.11" }

@@ -4,6 +4,8 @@ version = "0.2.2"
 edition.workspace = true
 license.workspace = true
 description = "convert ncm to mp3 or flac ..."
+documentation = "https://docs.rs/ncmc_lib/0.2.2/ncmc_lib/"
+repository.workspace = true
 
 [package.metadata.docs.rs]
 all-features = true
