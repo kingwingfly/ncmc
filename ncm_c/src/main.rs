@@ -11,7 +11,7 @@ struct Cli {
     /// Number of threads to use.
     threads: usize,
     /// No internet. Do not try to fetch cover from the Internet if not contained in the ncm file.
-    #[clap(long, default_value = "8")]
+    #[clap(long)]
     no_internet: bool,
     /// Input files, can be multiple.
     /// e.g. `find . -type f -name '*.ncm' -exec ncm_c {} +` or `fd -e ncm -X ncm_c` or `ncm_c *.ncm`.
