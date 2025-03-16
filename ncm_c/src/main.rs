@@ -10,7 +10,7 @@ struct Cli {
     #[clap(short = 'j', long, default_value = "8")]
     /// Number of threads to use.
     threads: usize,
-    /// No internet. Do not try to fetch cover from the internet if not contained in the ncm file.
+    /// No internet. Do not try to fetch cover from the Internet if not contained in the ncm file.
     #[clap(long, default_value = "8")]
     no_internet: bool,
     /// Input files, can be multiple.
