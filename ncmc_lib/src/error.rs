@@ -10,6 +10,7 @@ pub enum NcmError {
     Invalid(String),
     #[error("Invalid music tag")]
     InvalidTag(#[from] id3::Error),
+    #[cfg(feature = "cover_download")]
     #[error("Network error: {0}")]
     Network(#[from] ureq::Error),
 }
