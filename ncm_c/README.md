@@ -21,7 +21,11 @@ cargo install ncm_c
 ```
 or download the binary from [release page](https://github.com/kingwingfly/ncmc/releases)
 
+# Others
+
+The core file parser is published as a crate: [ncmc_lib](https://crates.io/crates/ncmc_lib).
+
 # Acknowledgement
 
-[YTSakura233/ncm2mp3](https://github.com/YTSakura233/ncm2mp3)
-[taurusxin/ncmdump](https://github.com/taurusxin/ncmdump)
+- [YTSakura233/ncm2mp3](https://github.com/YTSakura233/ncm2mp3)
+- [taurusxin/ncmdump](https://github.com/taurusxin/ncmdump)
