@@ -10,6 +10,9 @@ struct Cli {
     #[clap(short = 'j', long, default_value = "8")]
     /// Number of threads to use.
     threads: usize,
+    /// No internet. Do not try to fetch cover from the internet if not contained in the ncm file.
+    #[clap(long, default_value = "8")]
+    no_internet: bool,
     /// Input files, can be multiple.
     /// e.g. `find . -type f -name '*.ncm' -exec ncm_c {} +` or `fd -e ncm -X ncm_c` or `ncm_c *.ncm`.
     /// The output will be next to the input file.
@@ -46,7 +49,10 @@ fn main() {
                     // Extract the stolen task, if there is one.
                     .and_then(|s| s.success())
                 }) {
-                    match NcmFile::open(&path).and_then(|f| f.save()) {
+                    match NcmFile::open(&path)
+                        .and_then(|f| f.with_cover())
+                        .and_then(|f| f.save())
+                    {
                         Ok(_) => println!("Decrypted {}", path.display()),
                         Err(e) => eprintln!("Failed to decrypt {}: {}", path.display(), e),
                     }

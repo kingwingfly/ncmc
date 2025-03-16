@@ -10,6 +10,8 @@ pub enum NcmError {
     Invalid(String),
     #[error("Invalid music tag")]
     InvalidTag(#[from] id3::Error),
+    #[error("Network error: {0}")]
+    Network(#[from] ureq::Error),
 }
 
 /// type alias for `Result`

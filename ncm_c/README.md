@@ -24,3 +24,4 @@ or download the binary from [release page](https://github.com/kingwingfly/ncmc/r
 # Acknowledgement
 
 [YTSakura233/ncm2mp3](https://github.com/YTSakura233/ncm2mp3)
+[taurusxin/ncmdump](https://github.com/taurusxin/ncmdump)

@@ -9,6 +9,13 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.1.16] - 2025-03-16
+
+- fix bug: skip cover frame correctly when parsing metadata.
+- fix bug: convert metadata fields all to String as upstream does.
+- new feature: `cover_download` feature to download cover image from internet if not contained in ncm file.
+- bump dependencies
+
 ## [0.1.15] - 2025-03-03
 
 - more concrete error message when parsing invalid ncm file

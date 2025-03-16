@@ -13,6 +13,10 @@ let ncm = NcmFile::open("path/to/your.ncm").unwrap();
 ncm.save().unwrap();
 ```
 
+# features
+
+- `cover_download`: provide `with_cover` method to download cover image from internet if not contained in ncm file.
+
 # Acknowledgement
 
 [YTSakura233/ncm2mp3](https://github.com/YTSakura233/ncm2mp3)
