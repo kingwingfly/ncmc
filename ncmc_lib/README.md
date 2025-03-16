@@ -20,3 +20,4 @@ ncm.save().unwrap();
 # Acknowledgement
 
 [YTSakura233/ncm2mp3](https://github.com/YTSakura233/ncm2mp3)
+[taurusxin/ncmdump](https://github.com/taurusxin/ncmdump)

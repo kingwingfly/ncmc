@@ -3,7 +3,7 @@ members = ["ncmc_lib", "ncm_c"]
 resolver = "2"
 
 [workspace.package]
-version = "0.1.16"
+version = "0.2.0"
 authors = ["Louis <836250617@qq.com>"]
 description = "convert ncm to mp3 or flac ..."
 license = "MIT"
