@@ -50,7 +50,13 @@ fn main() {
                     .and_then(|s| s.success())
                 }) {
                     match NcmFile::open(&path)
-                        .and_then(|f| f.with_cover())
+                        .and_then(|f| {
+                            if args.no_internet {
+                                Ok(f)
+                            } else {
+                                f.with_cover()
+                            }
+                        })
                         .and_then(|f| f.save())
                     {
                         Ok(_) => println!("Decrypted {}", path.display()),
