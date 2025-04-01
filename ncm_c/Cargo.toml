@@ -10,5 +10,5 @@ repository.workspace = true
 ncmc_lib = { path = "../ncmc_lib", version = "0.2.0", features = [
     "cover_download",
 ] }
-clap = { version = "4.5.31", features = ["derive"] }
+clap = { version = "4.5.34", features = ["derive"] }
 crossbeam = { version = "0.8.4" }
