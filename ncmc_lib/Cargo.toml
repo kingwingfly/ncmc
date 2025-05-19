@@ -1,10 +1,10 @@
 [package]
 name = "ncmc_lib"
-version = "0.2.2"
+version = "0.2.4"
 edition.workspace = true
 license.workspace = true
 description = "convert ncm to mp3 or flac ..."
-documentation = "https://docs.rs/ncmc_lib/0.2.2/ncmc_lib/"
+documentation = "https://docs.rs/ncmc_lib"
 repository.workspace = true
 
 [package.metadata.docs.rs]
@@ -13,13 +13,13 @@ rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 thiserror = { workspace = true }
-id3 = { version = "1.16.2" }
-aes = { version = "0.8.4" }
-ecb = { version = "0.1.2" }
-base64 = { version = "0.22.1" }
+id3 = { version = "1.16" }
+aes = { version = "0.8" }
+ecb = { version = "0.1" }
+base64 = { version = "0.22" }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
-ureq = { version = "3.0.9", optional = true }
+ureq = { version = "3.0", optional = true }
 
 [features]
 default = []

@@ -7,7 +7,7 @@ use std::sync::Arc;
 #[derive(Parser)]
 #[command(version, about)]
 struct Cli {
-    #[clap(short = 'j', long, default_value = "8")]
+    #[clap(short = 'j', long, default_value_t=std::thread::available_parallelism().map(|n| n.get()).unwrap_or_default())]
     /// Number of threads to use.
     threads: usize,
     /// No internet. Do not try to fetch cover from the Internet if not contained in the ncm file.

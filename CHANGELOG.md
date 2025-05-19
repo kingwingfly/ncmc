@@ -9,6 +9,11 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.2.4] - 2025-03-16
+
+- bump dependencies
+- `-j` default using cpu logic core number instead 8
+
 ## [0.2.3] - 2025-03-16
 
 - repo url

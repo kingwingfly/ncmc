@@ -9,6 +9,8 @@ A tool to convert ncm file to mp3/flac/...
 ```shell
 ncm_c -h
 
+ncm_c *.ncm
+# for unix-pro guys
 find . -type f -name '*.ncm' -exec ncm_c {} +
 # for `fd` user
 fd -e ncm -X ncm_c
