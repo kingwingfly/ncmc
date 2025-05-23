@@ -166,7 +166,7 @@ impl NcmFile {
         Ok(())
     }
 
-    /// savenext to the original ncm file without tags
+    /// save next to the original ncm file without tags
     pub fn save_without_meta(self) -> Result<()> {
         let path = self.path.with_extension(&self.meta.format);
         self.save_without_meta_to(path)
