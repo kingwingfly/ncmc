@@ -3,15 +3,15 @@
 
 mod error;
 
-use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, KeyInit};
-use base64::{prelude::BASE64_STANDARD, Engine};
+use aes::cipher::{BlockDecryptMut, KeyInit, block_padding::Pkcs7};
+use base64::{Engine, prelude::BASE64_STANDARD};
 use ecb::Decryptor;
 use error::{NcmError, Result};
 use id3::{
-    frame::{Picture, PictureType},
     Tag, TagLike as _,
+    frame::{Picture, PictureType},
 };
-use serde::{ser::SerializeTuple as _, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, ser::SerializeTuple as _};
 use serde_json::Value;
 use std::{
     fs::File,
@@ -137,7 +137,7 @@ impl NcmFile {
             return Err(NcmError::Invalid("Invalid meta marker".to_string()));
         }
         serde_json::from_slice(&buf[6..])
-            .map_err(|e| NcmError::Invalid(format!("Failed to parse metadata: {}", e)))
+            .map_err(|e| NcmError::Invalid(format!("Failed to parse metadata: {e}")))
     }
 
     fn get_cover(file: &mut File) -> Result<Vec<u8>> {
