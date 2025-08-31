@@ -224,6 +224,7 @@ impl Iterator for Key {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[allow(missing_docs)]
 pub struct Meta {
+    #[serde(default)]
     pub album: String,
     #[serde(rename = "albumId", deserialize_with = "deserialize_to_string")]
     pub album_id: String,
@@ -232,7 +233,9 @@ pub struct Meta {
     pub album_pic: String,
     #[serde(rename = "albumPicDocId", deserialize_with = "deserialize_to_string")]
     pub album_pic_doc_id: String,
+    #[serde(default)]
     pub alias: Vec<String>,
+    #[serde(default)]
     pub artist: Vec<Artist>,
     pub bitrate: usize,
     pub duration: usize,
@@ -246,9 +249,9 @@ pub struct Meta {
     pub music_id: String,
     #[serde(rename = "musicName")]
     pub music_name: String,
-    #[serde(rename = "mvId", deserialize_with = "deserialize_to_string")]
+    #[serde(default, rename = "mvId", deserialize_with = "deserialize_to_string")]
     pub mv_id: String,
-    #[serde(rename = "transNames")]
+    #[serde(default, rename = "transNames")]
     pub trans_names: Vec<String>,
     #[serde(skip)]
     pub cover: Vec<u8>,
