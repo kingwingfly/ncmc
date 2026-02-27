@@ -1,6 +1,6 @@
 [workspace]
 members = ["ncmc_lib", "ncm_c"]
-resolver = "2"
+resolver = "3"
 
 [workspace.package]
 authors = ["Louis <836250617@qq.com>"]
@@ -10,7 +10,7 @@ edition = "2024"
 repository = "https://github.com/kingwingfly/ncmc"
 
 [workspace.dependencies]
-thiserror = { version = "2.0.11" }
+thiserror = { version = "2.0" }
 
 [profile.release]
 lto = "fat"

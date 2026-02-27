@@ -1,13 +1,13 @@
 [package]
 name = "ncm_c"
-version = "0.2.6"
+version = "0.2.7"
 edition.workspace = true
 license.workspace = true
 description = "convert ncm to mp3 or flac ..."
 repository.workspace = true
 
 [dependencies]
-ncmc_lib = { path = "../ncmc_lib", version = "0.2.0", features = [
+ncmc_lib = { path = "../ncmc_lib", version = "0.2", features = [
     "cover_download",
 ] }
 clap = { version = "4.5", features = ["derive"] }

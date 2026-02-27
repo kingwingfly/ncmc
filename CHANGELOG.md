@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.2.7] - 2026-02-28
+
+- bump deps
+
 ## [0.2.6] - 2025-08-31
 
 - better `Meta` deserializing

@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize, ser::SerializeTuple as _};
 use serde_json::Value;
 use std::{
     fs::File,
-    io::{Read, Seek, Write as _},
+    io::{Read, Seek as _, Write as _},
     path::{Path, PathBuf},
 };
 
@@ -54,12 +54,7 @@ impl NcmFile {
     /// If cover in meta is empty, download it from the meta.album_pic
     #[cfg(feature = "cover_download")]
     pub fn with_cover(mut self) -> Result<Self> {
-        if self.meta.cover.is_empty() {
-            self.meta.cover = ureq::get(&self.meta.album_pic)
-                .call()?
-                .body_mut()
-                .read_to_vec()?;
-        }
+        self.fetch_cover()?;
         Ok(self)
     }
 
@@ -187,6 +182,7 @@ impl NcmFile {
 }
 
 impl Read for NcmFile {
+    /// Read decrypted bytes from ncm file
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
         let size = self.file.read(buf)?;
         for (i, key) in (0..size).zip(&mut self.key) {
