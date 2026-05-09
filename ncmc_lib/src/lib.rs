@@ -3,7 +3,7 @@
 
 mod error;
 
-use aes::cipher::{BlockDecryptMut, KeyInit, block_padding::Pkcs7};
+use aes::cipher::{BlockModeDecrypt as _, KeyInit as _, block_padding::Pkcs7};
 use base64::{Engine, prelude::BASE64_STANDARD};
 use ecb::Decryptor;
 use error::{NcmError, Result};
@@ -88,7 +88,7 @@ impl NcmFile {
         buf.iter_mut().for_each(|byte| *byte ^= KEY_MASK);
         let aes = Decryptor::<aes::Aes128>::new_from_slice(CORE_KEY).unwrap();
         let buf = aes
-            .decrypt_padded_mut::<Pkcs7>(&mut buf)
+            .decrypt_padded::<Pkcs7>(&mut buf)
             .map_err(|_| NcmError::Invalid("Failed to decrypt key".to_string()))?;
         if &buf[..17] != b"neteasecloudmusic" {
             return Err(NcmError::Invalid("Invalid key header".to_string()));
@@ -126,7 +126,7 @@ impl NcmFile {
             .map_err(|_| NcmError::Invalid("Failed to decode base64 metadata".to_string()))?;
         let aes = Decryptor::<aes::Aes128>::new_from_slice(META_KEY).unwrap();
         let buf = aes
-            .decrypt_padded_mut::<Pkcs7>(&mut buf)
+            .decrypt_padded::<Pkcs7>(&mut buf)
             .map_err(|_| NcmError::Invalid("Failed to decrypt metadata".to_string()))?;
         if &buf[..6] != b"music:" {
             return Err(NcmError::Invalid("Invalid meta marker".to_string()));
