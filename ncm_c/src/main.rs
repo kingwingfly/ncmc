@@ -66,7 +66,10 @@ fn main() {
                             true => println!("{}", p.display()),
                             false => println!("Decrypted {} => {}", path.display(), p.display()),
                         },
-                        Err(e) => eprintln!("Failed to decrypt {}: {}", path.display(), e),
+                        Err(e) => match args.quiet {
+                            true => eprintln!("Failed to decrypt {}: {}", path.display(), e),
+                            false => eprintln!("{}", path.display()),
+                        },
                     }
                 }
             })
