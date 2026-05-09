@@ -256,8 +256,8 @@ pub struct Meta {
 
 #[derive(Debug, Clone)]
 pub struct Artist {
-    name: String,
-    id: String,
+    pub name: String,
+    pub id: String,
 }
 
 impl Serialize for Artist {
