@@ -9,6 +9,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.2.10] - 2026-05-09
+
+- end with exitcode set
+
 ## [0.2.9] - 2026-05-09
 
 - `--quiet` will print failed ncm path to stderr

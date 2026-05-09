@@ -2,6 +2,7 @@ use clap::Parser;
 use crossbeam_deque::{Injector, Worker};
 use ncmc_lib::NcmFile;
 use std::path::PathBuf;
+use std::process::ExitCode;
 use std::sync::Arc;
 
 #[derive(Parser)]
@@ -22,7 +23,7 @@ struct Cli {
     input: Vec<PathBuf>,
 }
 
-fn main() {
+fn main() -> ExitCode {
     let args = Cli::parse();
     let global = Arc::new(Injector::new());
     for path in args.input.into_iter() {
@@ -32,12 +33,13 @@ fn main() {
         .map(|_| Worker::new_fifo())
         .collect::<Vec<_>>();
     let stealers = Arc::new(workers.iter().map(|w| w.stealer()).collect::<Vec<_>>());
-    workers
+    match workers
         .into_iter()
         .map(|local| {
             let global = global.clone();
             let stealers = stealers.clone();
             std::thread::spawn(move || {
+                let mut has_err = false;
                 while let Some(path) = local.pop().or_else(|| {
                     // Otherwise, we need to look for a task elsewhere.
                     std::iter::repeat_with(|| {
@@ -66,15 +68,24 @@ fn main() {
                             true => println!("{}", p.display()),
                             false => println!("Decrypted {} => {}", path.display(), p.display()),
                         },
-                        Err(e) => match args.quiet {
-                            true => eprintln!("Failed to decrypt {}: {}", path.display(), e),
-                            false => eprintln!("{}", path.display()),
-                        },
+                        Err(e) => {
+                            has_err = true;
+                            match args.quiet {
+                                true => eprintln!("Failed to decrypt {}: {}", path.display(), e),
+                                false => eprintln!("{}", path.display()),
+                            }
+                        }
                     }
                 }
+                has_err
             })
         })
         .collect::<Vec<_>>()
         .into_iter()
-        .for_each(|jh| jh.join().unwrap());
+        .map(|jh| jh.join().unwrap())
+        .fold(false, |acc, has_err| acc | has_err)
+    {
+        true => ExitCode::FAILURE,
+        false => ExitCode::SUCCESS,
+    }
 }
