@@ -6,7 +6,7 @@ A tool to convert ncm file to mp3/flac/...
 
 # Usage
 
-```shell
+```sh
 ncm_c -h
 
 ncm_c *.ncm
@@ -14,6 +14,9 @@ ncm_c *.ncm
 find . -type f -name '*.ncm' -exec ncm_c {} +
 # for `fd` user
 fd -e ncm -X ncm_c
+
+# decrtpt and gather
+fd -e ncm -X ncm_c --quiet | xargs -d'\n' mv -t .
 ```
 
 # Installation
