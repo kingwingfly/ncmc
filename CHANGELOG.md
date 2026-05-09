@@ -9,7 +9,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
-## [0.2.7] - 2026-05-09
+## [0.2.8] - 2026-05-09
 
 - bump deps
 - fix bug: cover larger than 10MB is refused by `ureq`
