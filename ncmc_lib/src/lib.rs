@@ -1,5 +1,5 @@
 #![doc = include_str!("../README.md")]
-#![cfg_attr(docsrs, feature(doc_auto_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod error;
 
@@ -61,10 +61,11 @@ impl NcmFile {
     /// `with_cover` but in place
     #[cfg(feature = "cover_download")]
     pub fn fetch_cover(&mut self) -> Result<()> {
-        if self.meta.cover.is_empty() {
+        if self.meta.cover.is_empty() && !self.meta.album_pic.is_empty() {
             self.meta.cover = ureq::get(&self.meta.album_pic)
                 .call()?
                 .body_mut()
+                .with_config() // cancel the default body size limit
                 .read_to_vec()?;
         }
         Ok(())
@@ -148,31 +149,31 @@ impl NcmFile {
     }
 
     /// save as general format next to the original ncm file
-    pub fn save(self) -> Result<()> {
+    pub fn save(self) -> Result<PathBuf> {
         let path = self.path.with_extension(&self.meta.format);
         self.save_to(path)
     }
 
     /// save as general format to the specified path
-    pub fn save_to(self, path: impl AsRef<Path>) -> Result<()> {
+    pub fn save_to(self, path: impl AsRef<Path>) -> Result<PathBuf> {
         let tag = Tag::from(&self.meta);
-        self.save_without_meta_to(&path)?;
-        tag.write_to_path(path, id3::Version::Id3v24)?;
-        Ok(())
+        self.save_without_meta_to(path.as_ref())?;
+        tag.write_to_path(path.as_ref(), id3::Version::Id3v24)?;
+        Ok(path.as_ref().to_owned())
     }
 
     /// save next to the original ncm file without tags
-    pub fn save_without_meta(self) -> Result<()> {
+    pub fn save_without_meta(self) -> Result<PathBuf> {
         let path = self.path.with_extension(&self.meta.format);
         self.save_without_meta_to(path)
     }
 
     /// save to the specified path without tags
-    pub fn save_without_meta_to(mut self, path: impl AsRef<Path>) -> Result<()> {
-        let mut file = std::fs::File::create(&path)?;
+    pub fn save_without_meta_to(mut self, path: impl AsRef<Path>) -> Result<PathBuf> {
+        let mut file = std::fs::File::create(path.as_ref())?;
         std::io::copy(&mut self, &mut file)?;
         file.flush()?;
-        Ok(())
+        Ok(path.as_ref().to_owned())
     }
 
     /// Get the meta data (including cover, artist, album, etc.)

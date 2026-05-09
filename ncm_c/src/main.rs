@@ -1,5 +1,5 @@
 use clap::Parser;
-use crossbeam::deque::{Injector, Worker};
+use crossbeam_deque::{Injector, Worker};
 use ncmc_lib::NcmFile;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -7,12 +7,15 @@ use std::sync::Arc;
 #[derive(Parser)]
 #[command(version, about)]
 struct Cli {
-    #[clap(short = 'j', long, default_value_t=std::thread::available_parallelism().map(|n| n.get()).unwrap_or_default())]
     /// Number of threads to use.
+    #[clap(short = 'j', long, default_value_t=std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1))]
     threads: usize,
     /// No internet. Do not try to fetch cover from the Internet if not contained in the ncm file.
     #[clap(long)]
     no_internet: bool,
+    /// Show less information about decrypt result
+    #[clap(short = 'q', long)]
+    quiet: bool,
     /// Input files, can be multiple.
     /// e.g. `find . -type f -name '*.ncm' -exec ncm_c {} +` or `fd -e ncm -X ncm_c` or `ncm_c *.ncm`.
     /// The output will be next to the input file.
@@ -59,7 +62,10 @@ fn main() {
                         })
                         .and_then(|f| f.save())
                     {
-                        Ok(_) => println!("Decrypted {}", path.display()),
+                        Ok(p) => match args.quiet {
+                            true => println!("{}", p.display()),
+                            false => println!("Decrypted {} => {}", path.display(), p.display()),
+                        },
                         Err(e) => eprintln!("Failed to decrypt {}: {}", path.display(), e),
                     }
                 }

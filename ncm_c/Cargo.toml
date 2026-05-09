@@ -1,14 +1,14 @@
 [package]
 name = "ncm_c"
-version = "0.2.7"
+version = "0.2.8"
 edition.workspace = true
 license.workspace = true
 description = "convert ncm to mp3 or flac ..."
 repository.workspace = true
 
 [dependencies]
-ncmc_lib = { path = "../ncmc_lib", version = "0.2", features = [
+ncmc_lib = { path = "../ncmc_lib", version = "0.3", features = [
     "cover_download",
 ] }
-clap = { version = "4.5", features = ["derive"] }
-crossbeam = { version = "0.8" }
+clap = { version = "4.6", features = ["derive"] }
+crossbeam-deque = { version = "0.8" }

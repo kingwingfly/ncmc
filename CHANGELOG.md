@@ -13,6 +13,8 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 - bump deps
 - fix bug: cover larger than 10MB is refused by `ureq`
+- add `--quiet` cli flag for unix pro guys
+- fix a few potential bugs
 
 ## [0.2.7] - 2026-02-28
 
